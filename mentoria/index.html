@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#09090b" />
+    <title>Mentoria Black</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #09090b;
+        --surface: rgba(24, 24, 27, 0.72);
+        --surface-strong: #18181b;
+        --border: rgba(255, 255, 255, 0.1);
+        --text: #fafafa;
+        --muted: #a1a1aa;
+        --accent: #eab308;
+        --accent-strong: #facc15;
+        --success: #86efac;
+      }
+
+      * { box-sizing: border-box; }
+
+      html { scroll-behavior: smooth; }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        overflow-x: hidden;
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background:
+          radial-gradient(circle at 15% 15%, rgba(234, 179, 8, 0.11), transparent 28rem),
+          radial-gradient(circle at 85% 85%, rgba(113, 113, 122, 0.14), transparent 25rem),
+          var(--bg);
+      }
+
+      .ambient {
+        position: fixed;
+        z-index: -1;
+        width: 32rem;
+        height: 32rem;
+        border-radius: 999px;
+        filter: blur(90px);
+        opacity: 0.22;
+        pointer-events: none;
+        animation: float 13s ease-in-out infinite;
+      }
+
+      .ambient-one { top: -13rem; right: -9rem; background: #eab308; }
+      .ambient-two { bottom: -16rem; left: -12rem; background: #52525b; animation-delay: -6s; }
+
+      .app-shell {
+        width: min(100% - 2rem, 1080px);
+        min-height: 100vh;
+        margin: 0 auto;
+        padding: 1.5rem 0 3rem;
+        display: flex;
+        flex-direction: column;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.5rem 0 3rem;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.7rem;
+        text-decoration: none;
+        color: var(--text);
+        font-weight: 800;
+        letter-spacing: -0.04em;
+      }
+
+      .brand-mark {
+        display: grid;
+        width: 2.25rem;
+        height: 2.25rem;
+        place-items: center;
+        color: #18181b;
+        font-size: 0.78rem;
+        font-weight: 900;
+        letter-spacing: -0.08em;
+        background: linear-gradient(135deg, #fef08a, var(--accent));
+        border-radius: 0.72rem;
+        box-shadow: 0 8px 30px rgba(234, 179, 8, 0.22);
+      }
+
+      .header-tag {
+        padding: 0.45rem 0.75rem;
+        color: #d4d4d8;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        background: rgba(39, 39, 42, 0.6);
+        border: 1px solid var(--border);
+        border-radius: 999px;
+      }
+
+      main {
+        flex: 1;
+        display: grid;
+        place-items: center;
+      }
+
+      .experience {
+        width: min(100%, 760px);
+      }
+
+      .intro {
+        margin-bottom: 1.5rem;
+        text-align: center;
+        animation: enter 650ms cubic-bezier(.22, 1, .36, 1) both;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        margin: 0 0 1rem;
+        padding: 0.42rem 0.72rem;
+        color: var(--accent-strong);
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        background: rgba(234, 179, 8, 0.09);
+        border: 1px solid rgba(234, 179, 8, 0.22);
+        border-radius: 999px;
+      }
+
+      .eyebrow::before {
+        width: 0.42rem;
+        height: 0.42rem;
+        background: currentColor;
+        border-radius: 999px;
+        box-shadow: 0 0 14px currentColor;
+        content: "";
+      }
+
+      h1 {
+        max-width: 700px;
+        margin: 0 auto;
+        font-size: clamp(2rem, 5vw, 3.55rem);
+        line-height: 1.05;
+        letter-spacing: -0.065em;
+      }
+
+      .intro p {
+        max-width: 520px;
+        margin: 1.15rem auto 0;
+        color: var(--muted);
+        font-size: clamp(0.95rem, 2vw, 1.05rem);
+        line-height: 1.65;
+      }
+
+      .quiz-card {
+        overflow: hidden;
+        background: linear-gradient(145deg, rgba(39, 39, 42, 0.88), rgba(18, 18, 20, 0.72));
+        border: 1px solid var(--border);
+        border-radius: 1.5rem;
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(18px);
+      }
+
+      .progress-area { padding: 1.35rem 1.5rem 0; }
+
+      .progress-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.72rem;
+        color: #d4d4d8;
+        font-size: 0.78rem;
+        font-weight: 700;
+      }
+
+      .progress-track {
+        height: 0.42rem;
+        overflow: hidden;
+        background: #27272a;
+        border-radius: 999px;
+      }
+
+      .progress-bar {
+        width: 33.33%;
+        height: 100%;
+        background: linear-gradient(90deg, #ca8a04, #fde047);
+        border-radius: inherit;
+        box-shadow: 0 0 16px rgba(250, 204, 21, 0.55);
+        transition: width 550ms cubic-bezier(.22, 1, .36, 1);
+      }
+
+      .question-stage {
+        min-height: 390px;
+        padding: 2.25rem 1.5rem 1.5rem;
+      }
+
+      .question {
+        animation: question-in 480ms cubic-bezier(.22, 1, .36, 1) both;
+      }
+
+      .question.is-leaving { animation: question-out 240ms ease-in both; }
+
+      .question-number {
+        margin: 0 0 0.7rem;
+        color: var(--accent-strong);
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+      }
+
+      h2 {
+        max-width: 600px;
+        margin: 0;
+        font-size: clamp(1.45rem, 3.5vw, 2rem);
+        line-height: 1.15;
+        letter-spacing: -0.045em;
+      }
+
+      .question-description {
+        margin: 0.8rem 0 1.5rem;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .options {
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      .option {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+        width: 100%;
+        padding: 1rem;
+        color: #e4e4e7;
+        text-align: left;
+        font: inherit;
+        font-weight: 650;
+        cursor: pointer;
+        background: rgba(24, 24, 27, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        border-radius: 0.9rem;
+        transition: transform 200ms ease, border-color 200ms ease, background 200ms ease, box-shadow 200ms ease;
+      }
+
+      .option:hover {
+        transform: translateY(-2px);
+        background: rgba(63, 63, 70, 0.55);
+        border-color: rgba(250, 204, 21, 0.48);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+      }
+
+      .option:focus-visible, .button:focus-visible {
+        outline: 3px solid rgba(250, 204, 21, 0.5);
+        outline-offset: 3px;
+      }
+
+      .option.selected {
+        color: #fefce8;
+        background: rgba(234, 179, 8, 0.13);
+        border-color: var(--accent);
+        box-shadow: inset 0 0 0 1px rgba(250, 204, 21, 0.14), 0 10px 30px rgba(0, 0, 0, 0.18);
+      }
+
+      .option-icon {
+        display: grid;
+        flex: 0 0 auto;
+        width: 2rem;
+        height: 2rem;
+        place-items: center;
+        color: #d4d4d8;
+        font-size: 0.82rem;
+        background: #27272a;
+        border-radius: 0.62rem;
+        transition: background 200ms ease, color 200ms ease;
+      }
+
+      .selected .option-icon { color: #18181b; background: var(--accent-strong); }
+
+      .check {
+        margin-left: auto;
+        width: 1.3rem;
+        height: 1.3rem;
+        border: 1px solid #52525b;
+        border-radius: 999px;
+        transition: all 200ms ease;
+      }
+
+      .selected .check {
+        background: var(--accent-strong);
+        border-color: var(--accent-strong);
+        box-shadow: inset 0 0 0 4px #27272a;
+      }
+
+      .card-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1.1rem 1.5rem;
+        background: rgba(9, 9, 11, 0.4);
+        border-top: 1px solid var(--border);
+      }
+
+      .hint { margin: 0; color: #71717a; font-size: 0.82rem; }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.55rem;
+        min-width: 130px;
+        padding: 0.82rem 1rem;
+        color: #18181b;
+        font: inherit;
+        font-size: 0.9rem;
+        font-weight: 850;
+        cursor: pointer;
+        background: linear-gradient(135deg, #fef08a, var(--accent-strong));
+        border: 0;
+        border-radius: 0.75rem;
+        box-shadow: 0 8px 22px rgba(234, 179, 8, 0.2);
+        transition: transform 200ms ease, box-shadow 200ms ease, opacity 200ms ease;
+      }
+
+      .button:hover:not(:disabled) { transform: scale(1.025); box-shadow: 0 12px 30px rgba(234, 179, 8, 0.31); }
+      .button:active:not(:disabled) { transform: scale(0.98); }
+      .button:disabled { cursor: not-allowed; opacity: 0.38; }
+
+      .success {
+        display: grid;
+        min-height: 390px;
+        place-items: center;
+        padding: 2.5rem 1.5rem;
+        text-align: center;
+        animation: question-in 550ms cubic-bezier(.22, 1, .36, 1) both;
+      }
+
+      .success-icon {
+        display: grid;
+        width: 4.5rem;
+        height: 4.5rem;
+        margin: 0 auto 1.35rem;
+        place-items: center;
+        color: #18181b;
+        font-size: 1.7rem;
+        font-weight: 900;
+        background: var(--success);
+        border-radius: 999px;
+        box-shadow: 0 0 0 10px rgba(134, 239, 172, 0.08), 0 0 38px rgba(134, 239, 172, 0.24);
+      }
+
+      .success h2 { margin: 0 auto; }
+      .success p { max-width: 470px; margin: 0.9rem auto 1.6rem; color: var(--muted); line-height: 1.65; }
+      .success .button { min-width: 180px; }
+
+      footer { padding-top: 2rem; color: #71717a; font-size: 0.78rem; text-align: center; }
+
+      @keyframes enter { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+      @keyframes question-in { from { opacity: 0; transform: translateX(24px) scale(0.985); } to { opacity: 1; transform: translateX(0) scale(1); } }
+      @keyframes question-out { to { opacity: 0; transform: translateX(-18px) scale(0.99); } }
+      @keyframes float { 0%, 100% { transform: translate3d(0, 0, 0) scale(1); } 50% { transform: translate3d(2rem, 1rem, 0) scale(1.08); } }
+
+      @media (max-width: 560px) {
+        .app-shell { width: min(100% - 1.25rem, 1080px); padding-top: 0.8rem; }
+        header { padding-bottom: 2.25rem; }
+        .header-tag { display: none; }
+        .question-stage { min-height: 410px; padding: 1.8rem 1.1rem 1.2rem; }
+        .progress-area { padding: 1.1rem 1.1rem 0; }
+        .card-footer { padding: 1rem 1.1rem; }
+        .hint { max-width: 120px; line-height: 1.35; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+
+    <div class="app-shell">
+      <header>
+        <a class="brand" href="#inicio" aria-label="Mentoria Black - início">
+          <span class="brand-mark">MB</span>
+          <span>Mentoria Black</span>
+        </a>
+        <span class="header-tag">Diagnóstico estratégico</span>
+      </header>
+
+      <main id="inicio">
+        <section class="experience" aria-live="polite">
+          <div class="intro">
+            <span class="eyebrow">Sua próxima evolução começa aqui</span>
+            <h1>Vamos desenhar o próximo nível do seu negócio.</h1>
+            <p>Responda algumas perguntas rápidas para personalizarmos sua experiência na Mentoria Black.</p>
+          </div>
+
+          <div class="quiz-card">
+            <div class="progress-area">
+              <div class="progress-top">
+                <span id="progress-label">Etapa 1 de 3</span>
+                <span id="progress-percent">33%</span>
+              </div>
+              <div class="progress-track" aria-hidden="true"><div class="progress-bar" id="progress-bar"></div></div>
+            </div>
+
+            <div class="question-stage" id="question-stage"></div>
+
+            <div class="card-footer" id="card-footer">
+              <p class="hint" id="hint">Escolha uma opção para continuar</p>
+              <button class="button" id="next-button" type="button" disabled>Continuar <span aria-hidden="true">→</span></button>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer>© 2025 Mentoria Black. Estratégia para quem decide crescer.</footer>
+    </div>
+
+    <script>
+      const questions = [
+        {
+          title: 'Em qual momento seu negócio está hoje?',
+          description: 'Isso nos ajuda a entender onde concentrar a estratégia desde o início.',
+          options: [
+            ['01', 'Estou estruturando minha ideia'],
+            ['02', 'Já vendo, mas preciso ganhar escala'],
+            ['03', 'Tenho uma operação consolidada'],
+            ['04', 'Quero reposicionar e aumentar meu lucro']
+          ]
+        },
+        {
+          title: 'Qual resultado faria mais diferença agora?',
+          description: 'Escolha a prioridade que está no centro das suas decisões neste momento.',
+          options: [
+            ['↗', 'Atrair mais clientes qualificados'],
+            ['◈', 'Aumentar meu faturamento'],
+            ['◎', 'Organizar processos e equipe'],
+            ['★', 'Fortalecer minha marca no mercado']
+          ]
+        },
+        {
+          title: 'Qual é o seu nível de comprometimento com essa mudança?',
+          description: 'Crescimento consistente exige clareza, direção e execução.',
+          options: [
+            ['A', 'Estou pronto para agir imediatamente'],
+            ['B', 'Quero entender o melhor caminho'],
+            ['C', 'Ainda estou avaliando possibilidades']
+          ]
+        }
+      ];
+
+      let currentQuestion = 0;
+      const answers = [];
+      const stage = document.getElementById('question-stage');
+      const nextButton = document.getElementById('next-button');
+      const progressBar = document.getElementById('progress-bar');
+      const progressLabel = document.getElementById('progress-label');
+      const progressPercent = document.getElementById('progress-percent');
+      const hint = document.getElementById('hint');
+      const cardFooter = document.getElementById('card-footer');
+
+      function updateProgress() {
+        const percentage = Math.round(((currentQuestion + 1) / questions.length) * 100);
+        progressBar.style.width = percentage + '%';
+        progressLabel.textContent = `Etapa ${currentQuestion + 1} de ${questions.length}`;
+        progressPercent.textContent = percentage + '%';
+      }
+
+      function renderQuestion() {
+        const question = questions[currentQuestion];
+        updateProgress();
+        nextButton.disabled = true;
+        nextButton.innerHTML = currentQuestion === questions.length - 1 ? 'Finalizar <span aria-hidden="true">✓</span>' : 'Continuar <span aria-hidden="true">→</span>';
+        hint.textContent = 'Escolha uma opção para continuar';
+        cardFooter.hidden = false;
+
+        stage.innerHTML = `
+          <article class="question">
+            <p class="question-number">Pergunta ${String(currentQuestion + 1).padStart(2, '0')}</p>
+            <h2>${question.title}</h2>
+            <p class="question-description">${question.description}</p>
+            <div class="options" role="radiogroup" aria-label="Opções da pergunta ${currentQuestion + 1}">
+              ${question.options.map(([icon, label], index) => `
+                <button class="option" type="button" role="radio" aria-checked="false" data-index="${index}">
+                  <span class="option-icon">${icon}</span>
+                  <span>${label}</span>
+                  <span class="check" aria-hidden="true"></span>
+                </button>
+              `).join('')}
+            </div>
+          </article>
+        `;
+
+        stage.querySelectorAll('.option').forEach((option) => {
+          option.addEventListener('click', () => {
+            stage.querySelectorAll('.option').forEach((item) => {
+              item.classList.remove('selected');
+              item.setAttribute('aria-checked', 'false');
+            });
+            option.classList.add('selected');
+            option.setAttribute('aria-checked', 'true');
+            answers[currentQuestion] = Number(option.dataset.index);
+            nextButton.disabled = false;
+            hint.textContent = 'Resposta selecionada. Você pode continuar.';
+          });
+        });
+      }
+
+      function showSuccess() {
+        progressBar.style.width = '100%';
+        progressLabel.textContent = 'Diagnóstico concluído';
+        progressPercent.textContent = '100%';
+        cardFooter.hidden = true;
+        stage.innerHTML = `
+          <section class="success">
+            <div>
+              <div class="success-icon">✓</div>
+              <h2>Seu diagnóstico foi concluído.</h2>
+              <p>Excelente decisão. Com suas respostas, vamos preparar o melhor próximo passo para a sua evolução estratégica.</p>
+              <button class="button" type="button" id="restart-button">Refazer diagnóstico</button>
+            </div>
+          </section>
+        `;
+        document.getElementById('restart-button').addEventListener('click', () => {
+          currentQuestion = 0;
+          answers.length = 0;
+          renderQuestion();
+        });
+      }
+
+      nextButton.addEventListener('click', () => {
+        if (nextButton.disabled) return;
+        const current = stage.querySelector('.question');
+        current.classList.add('is-leaving');
+        window.setTimeout(() => {
+          if (currentQuestion === questions.length - 1) {
+            showSuccess();
+            return;
+          }
+          currentQuestion += 1;
+          renderQuestion();
+        }, 230);
+      });
+
+      renderQuestion();
+    </script>
+  </body>
+</html>
