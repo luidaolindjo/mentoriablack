@@ -8,14 +8,16 @@
     <style>
       :root {
         color-scheme: dark;
-        --bg: #09090b;
-        --surface: rgba(24, 24, 27, 0.72);
-        --surface-strong: #18181b;
-        --border: rgba(255, 255, 255, 0.1);
-        --text: #fafafa;
-        --muted: #a1a1aa;
-        --accent: #eab308;
-        --accent-strong: #facc15;
+        --bg: #07070a;
+        --surface: rgba(24, 24, 30, 0.78);
+        --surface-strong: #1a1a22;
+        --surface-soft: rgba(39, 39, 48, 0.5);
+        --border: rgba(255, 255, 255, 0.11);
+        --border-subtle: rgba(255, 255, 255, 0.06);
+        --text: #f8f8fc;
+        --muted: #ababba;
+        --accent: #d9a514;
+        --accent-strong: #fde047;
         --success: #86efac;
       }
 
@@ -30,9 +32,10 @@
         color: var(--text);
         font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         background:
-          radial-gradient(circle at 15% 15%, rgba(234, 179, 8, 0.11), transparent 28rem),
-          radial-gradient(circle at 85% 85%, rgba(113, 113, 122, 0.14), transparent 25rem),
-          var(--bg);
+          radial-gradient(circle at 12% 8%, rgba(234, 179, 8, 0.14), transparent 26rem),
+          radial-gradient(circle at 88% 92%, rgba(91, 91, 121, 0.16), transparent 29rem),
+          radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.025), transparent 34rem),
+          linear-gradient(145deg, #08080b 0%, #0b0b10 48%, #07070a 100%);
       }
 
       .ambient {
@@ -47,7 +50,7 @@
         animation: float 13s ease-in-out infinite;
       }
 
-      .ambient-one { top: -13rem; right: -9rem; background: #eab308; }
+      .ambient-one { top: -13rem; right: -9rem; background: #facc15; }
       .ambient-two { bottom: -16rem; left: -12rem; background: #52525b; animation-delay: -6s; }
 
       .app-shell {
@@ -64,7 +67,7 @@
         align-items: center;
         justify-content: space-between;
         gap: 1rem;
-        padding: 0.5rem 0 3rem;
+        padding: 0.75rem 0 3.5rem;
       }
 
       .brand {
@@ -98,9 +101,10 @@
         font-weight: 700;
         letter-spacing: 0.08em;
         text-transform: uppercase;
-        background: rgba(39, 39, 42, 0.6);
+        background: rgba(31, 31, 39, 0.72);
         border: 1px solid var(--border);
         border-radius: 999px;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
       }
 
       main {
@@ -162,11 +166,11 @@
 
       .quiz-card {
         overflow: hidden;
-        background: linear-gradient(145deg, rgba(39, 39, 42, 0.88), rgba(18, 18, 20, 0.72));
-        border: 1px solid var(--border);
+        background: linear-gradient(145deg, rgba(35, 35, 44, 0.88), rgba(17, 17, 23, 0.86));
+        border: 1px solid rgba(255, 255, 255, 0.12);
         border-radius: 1.5rem;
-        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
-        backdrop-filter: blur(18px);
+        box-shadow: 0 28px 90px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(22px);
       }
 
       .progress-area { padding: 1.35rem 1.5rem 0; }
@@ -191,9 +195,9 @@
       .progress-bar {
         width: 33.33%;
         height: 100%;
-        background: linear-gradient(90deg, #ca8a04, #fde047);
+        background: linear-gradient(90deg, #b98009, #fde047 72%, #fff7ae);
         border-radius: inherit;
-        box-shadow: 0 0 16px rgba(250, 204, 21, 0.55);
+        box-shadow: 0 0 18px rgba(250, 204, 21, 0.5);
         transition: width 550ms cubic-bezier(.22, 1, .36, 1);
       }
 
@@ -248,17 +252,18 @@
         font: inherit;
         font-weight: 650;
         cursor: pointer;
-        background: rgba(24, 24, 27, 0.7);
-        border: 1px solid rgba(255, 255, 255, 0.09);
+        background: linear-gradient(135deg, rgba(37, 37, 46, 0.78), rgba(27, 27, 34, 0.72));
+        border: 1px solid var(--border-subtle);
         border-radius: 0.9rem;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
         transition: transform 200ms ease, border-color 200ms ease, background 200ms ease, box-shadow 200ms ease;
       }
 
       .option:hover {
-        transform: translateY(-2px);
-        background: rgba(63, 63, 70, 0.55);
-        border-color: rgba(250, 204, 21, 0.48);
-        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+        transform: translateY(-3px);
+        background: linear-gradient(135deg, rgba(54, 54, 65, 0.9), rgba(31, 31, 39, 0.88));
+        border-color: rgba(250, 204, 21, 0.52);
+        box-shadow: 0 14px 32px rgba(0, 0, 0, 0.28), 0 0 0 1px rgba(250, 204, 21, 0.05);
       }
 
       .option:focus-visible, .button:focus-visible {
@@ -268,9 +273,9 @@
 
       .option.selected {
         color: #fefce8;
-        background: rgba(234, 179, 8, 0.13);
-        border-color: var(--accent);
-        box-shadow: inset 0 0 0 1px rgba(250, 204, 21, 0.14), 0 10px 30px rgba(0, 0, 0, 0.18);
+        background: linear-gradient(135deg, rgba(234, 179, 8, 0.19), rgba(126, 88, 6, 0.14));
+        border-color: rgba(250, 204, 21, 0.82);
+        box-shadow: inset 0 0 0 1px rgba(250, 204, 21, 0.16), 0 12px 32px rgba(0, 0, 0, 0.24), 0 0 24px rgba(234, 179, 8, 0.08);
       }
 
       .option-icon {
@@ -309,8 +314,8 @@
         justify-content: space-between;
         gap: 1rem;
         padding: 1.1rem 1.5rem;
-        background: rgba(9, 9, 11, 0.4);
-        border-top: 1px solid var(--border);
+        background: rgba(8, 8, 12, 0.52);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
       }
 
       .hint { margin: 0; color: #71717a; font-size: 0.82rem; }
@@ -327,14 +332,14 @@
         font-size: 0.9rem;
         font-weight: 850;
         cursor: pointer;
-        background: linear-gradient(135deg, #fef08a, var(--accent-strong));
-        border: 0;
+        background: linear-gradient(135deg, #fff5a2, var(--accent-strong) 58%, #eab308);
+        border: 1px solid rgba(255, 255, 255, 0.32);
         border-radius: 0.75rem;
-        box-shadow: 0 8px 22px rgba(234, 179, 8, 0.2);
-        transition: transform 200ms ease, box-shadow 200ms ease, opacity 200ms ease;
+        box-shadow: 0 10px 26px rgba(234, 179, 8, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.42);
+        transition: transform 200ms ease, box-shadow 200ms ease, opacity 200ms ease, filter 200ms ease;
       }
 
-      .button:hover:not(:disabled) { transform: scale(1.025); box-shadow: 0 12px 30px rgba(234, 179, 8, 0.31); }
+      .button:hover:not(:disabled) { transform: scale(1.025) translateY(-1px); filter: brightness(1.04); box-shadow: 0 15px 34px rgba(234, 179, 8, 0.36); }
       .button:active:not(:disabled) { transform: scale(0.98); }
       .button:disabled { cursor: not-allowed; opacity: 0.38; }
 
@@ -365,7 +370,7 @@
       .success p { max-width: 470px; margin: 0.9rem auto 1.6rem; color: var(--muted); line-height: 1.65; }
       .success .button { min-width: 180px; }
 
-      footer { padding-top: 2rem; color: #71717a; font-size: 0.78rem; text-align: center; }
+      footer { padding-top: 2.25rem; color: #858592; font-size: 0.78rem; text-align: center; }
 
       @keyframes enter { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
       @keyframes question-in { from { opacity: 0; transform: translateX(24px) scale(0.985); } to { opacity: 1; transform: translateX(0) scale(1); } }
