@@ -210,6 +210,19 @@
         transition: width var(--duration-enter) var(--ease-out);
       }
 
+      .progress-bar.is-updating {
+        animation: progress-feedback 520ms var(--ease-out) both;
+      }
+
+      .progress-top span {
+        transition: color var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
+      }
+
+      .progress-top.is-updating span {
+        color: var(--accent-strong);
+        transform: translateY(-1px);
+      }
+
       .question-stage {
         min-height: 390px;
         padding: 2.25rem 1.5rem 1.5rem;
@@ -219,7 +232,19 @@
         animation: question-in var(--duration-enter) var(--ease-out) both;
       }
 
+      .question::before {
+        display: block;
+        width: 3rem;
+        height: 2px;
+        margin-bottom: 1.15rem;
+        background: linear-gradient(90deg, var(--accent-strong), transparent);
+        border-radius: 999px;
+        content: "";
+        animation: question-line-in 620ms 100ms var(--ease-out) both;
+      }
+
       .question.is-leaving { animation: question-out var(--duration-base) cubic-bezier(.4, 0, 1, 1) both; }
+      .question.is-leaving .option { animation: option-out 180ms ease-in both; }
 
       .option { animation: option-in var(--duration-base) var(--ease-out) both; }
       .option:nth-child(1) { animation-delay: 70ms; }
@@ -309,6 +334,14 @@
         box-shadow: inset 0 0 0 1px rgba(250, 204, 21, 0.2), 0 12px 32px rgba(0, 0, 0, 0.24), 0 0 28px rgba(234, 179, 8, 0.14);
       }
 
+      .option.is-selecting {
+        animation: option-selected 440ms var(--ease-out) both;
+      }
+
+      .option.is-selecting .option-icon {
+        animation: icon-selected 440ms var(--ease-out) both;
+      }
+
       .option.selected::after {
         position: absolute;
         top: 0.65rem;
@@ -363,6 +396,10 @@
       }
 
       .hint { margin: 0; color: #71717a; font-size: 0.82rem; }
+
+      .hint.is-updating {
+        animation: hint-feedback 360ms var(--ease-out) both;
+      }
 
       .button {
         display: inline-flex;
@@ -444,8 +481,14 @@
       @keyframes enter { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
       @keyframes question-in { from { opacity: 0; transform: translateX(24px) scale(0.985); } to { opacity: 1; transform: translateX(0) scale(1); } }
       @keyframes question-out { to { opacity: 0; transform: translateX(-18px) scale(0.99); } }
+      @keyframes question-line-in { from { opacity: 0; transform: scaleX(0); transform-origin: left; } to { opacity: 1; transform: scaleX(1); transform-origin: left; } }
       @keyframes select-feedback { from { opacity: 0; transform: scale(0.2); } to { opacity: 1; transform: scale(1); } }
       @keyframes option-in { from { opacity: 0; transform: translateY(10px) scale(0.99); } to { opacity: 1; transform: translateY(0) scale(1); } }
+      @keyframes option-out { to { opacity: 0; transform: translateX(-8px); } }
+      @keyframes option-selected { 0% { transform: scale(1); } 45% { transform: scale(1.018); } 100% { transform: scale(1); } }
+      @keyframes icon-selected { 0% { transform: scale(1) rotate(0); } 55% { transform: scale(1.14) rotate(-5deg); } 100% { transform: scale(1) rotate(0); } }
+      @keyframes hint-feedback { 0% { opacity: 0.45; transform: translateY(3px); } 100% { opacity: 1; transform: translateY(0); } }
+      @keyframes progress-feedback { 0%, 100% { filter: brightness(1); } 45% { filter: brightness(1.35); } }
       @keyframes float { 0%, 100% { transform: translate3d(0, 0, 0) scale(1); } 50% { transform: translate3d(2rem, 1rem, 0) scale(1.08); } }
 
       @media (max-width: 560px) {
@@ -574,9 +617,17 @@
 
       function updateProgress() {
         const percentage = Math.round(((currentQuestion + 1) / questions.length) * 100);
+        const progressTop = progressLabel.parentElement;
+
+        progressBar.classList.remove('is-updating');
+        progressTop.classList.remove('is-updating');
+        void progressBar.offsetWidth;
+
         progressBar.style.width = percentage + '%';
         progressLabel.textContent = `Etapa ${currentQuestion + 1} de ${questions.length}`;
         progressPercent.textContent = percentage + '%';
+        progressBar.classList.add('is-updating');
+        progressTop.classList.add('is-updating');
       }
 
       function renderQuestion() {
@@ -613,12 +664,17 @@
             item.tabIndex = -1;
           });
 
-          option.classList.add('selected');
+          option.classList.remove('is-selecting');
+          void option.offsetWidth;
+          option.classList.add('selected', 'is-selecting');
           option.setAttribute('aria-checked', 'true');
           option.tabIndex = 0;
           answers[currentQuestion] = Number(option.dataset.index);
           nextButton.disabled = false;
+          hint.classList.remove('is-updating');
+          void hint.offsetWidth;
           hint.textContent = 'Resposta selecionada. Você pode continuar.';
+          hint.classList.add('is-updating');
         }
 
         options.forEach((option, index) => {
