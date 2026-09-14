@@ -8,16 +8,16 @@
     <style>
       :root {
         color-scheme: dark;
-        --bg: #07070a;
-        --surface: rgba(24, 24, 30, 0.78);
-        --surface-strong: #1a1a22;
-        --surface-soft: rgba(39, 39, 48, 0.5);
-        --border: rgba(255, 255, 255, 0.11);
-        --border-subtle: rgba(255, 255, 255, 0.06);
-        --text: #f8f8fc;
-        --muted: #ababba;
-        --accent: #d9a514;
-        --accent-strong: #fde047;
+        --bg: #06060a;
+        --surface: rgba(18, 18, 27, 0.82);
+        --surface-strong: #15151f;
+        --surface-soft: rgba(41, 38, 60, 0.5);
+        --border: rgba(255, 255, 255, 0.12);
+        --border-subtle: rgba(255, 255, 255, 0.07);
+        --text: #fafaff;
+        --muted: #aaaab8;
+        --accent: #8b5cf6;
+        --accent-strong: #c4b5fd;
         --success: #86efac;
         --ease-out: cubic-bezier(.22, 1, .36, 1);
         --duration-fast: 180ms;
@@ -36,10 +36,10 @@
         color: var(--text);
         font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         background:
-          radial-gradient(circle at 12% 8%, rgba(234, 179, 8, 0.14), transparent 26rem),
-          radial-gradient(circle at 88% 92%, rgba(91, 91, 121, 0.16), transparent 29rem),
-          radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.025), transparent 34rem),
-          linear-gradient(145deg, #08080b 0%, #0b0b10 48%, #07070a 100%);
+          radial-gradient(circle at 10% 4%, rgba(124, 58, 237, 0.2), transparent 30rem),
+          radial-gradient(circle at 92% 88%, rgba(14, 165, 233, 0.12), transparent 31rem),
+          radial-gradient(circle at 50% 48%, rgba(255, 255, 255, 0.035), transparent 35rem),
+          linear-gradient(145deg, #050509 0%, #0b0913 48%, #06060b 100%);
       }
 
       .ambient {
@@ -55,8 +55,8 @@
         will-change: transform;
       }
 
-      .ambient-one { top: -13rem; right: -9rem; background: #facc15; }
-      .ambient-two { bottom: -16rem; left: -12rem; background: #52525b; animation-delay: -6s; }
+      .ambient-one { top: -13rem; right: -9rem; background: #7c3aed; }
+      .ambient-two { bottom: -16rem; left: -12rem; background: #0ea5e9; animation-delay: -6s; }
 
       .app-shell {
         width: min(100% - 2rem, 1080px);
@@ -117,9 +117,21 @@
       }
 
       main {
+        position: relative;
         flex: 1;
         display: grid;
         place-items: center;
+      }
+
+      main::before {
+        position: absolute;
+        inset: 4% 12%;
+        z-index: -1;
+        border: 1px solid rgba(196, 181, 253, 0.08);
+        border-radius: 3rem;
+        box-shadow: inset 0 0 80px rgba(139, 92, 246, 0.035);
+        content: "";
+        animation: frame-pulse 5s ease-in-out infinite;
       }
 
       .experience {
@@ -174,12 +186,24 @@
       }
 
       .quiz-card {
+        position: relative;
         overflow: hidden;
-        background: linear-gradient(145deg, rgba(35, 35, 44, 0.88), rgba(17, 17, 23, 0.86));
-        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: linear-gradient(145deg, rgba(31, 27, 46, 0.9), rgba(13, 13, 21, 0.94));
+        border: 1px solid rgba(255, 255, 255, 0.13);
         border-radius: 1.5rem;
-        box-shadow: 0 28px 90px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        box-shadow: 0 32px 100px rgba(0, 0, 0, 0.52), 0 0 70px rgba(124, 58, 237, 0.09), inset 0 1px 0 rgba(255, 255, 255, 0.08);
         backdrop-filter: blur(22px);
+      }
+
+      .quiz-card::before {
+        position: absolute;
+        top: 0;
+        left: 12%;
+        width: 76%;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(196, 181, 253, 0.72), transparent);
+        content: "";
+        animation: shimmer 3.8s ease-in-out infinite;
       }
 
       .progress-area { padding: 1.35rem 1.5rem 0; }
@@ -204,9 +228,9 @@
       .progress-bar {
         width: 33.33%;
         height: 100%;
-        background: linear-gradient(90deg, #b98009, #fde047 72%, #fff7ae);
+        background: linear-gradient(90deg, #6d28d9, #a78bfa 65%, #ddd6fe);
         border-radius: inherit;
-        box-shadow: 0 0 18px rgba(250, 204, 21, 0.5);
+        box-shadow: 0 0 20px rgba(167, 139, 250, 0.58);
         transition: width var(--duration-enter) var(--ease-out);
       }
 
@@ -300,10 +324,10 @@
       }
 
       .option:hover:not(:disabled) {
-        transform: translateY(-3px);
-        background: linear-gradient(135deg, rgba(54, 54, 65, 0.9), rgba(31, 31, 39, 0.88));
-        border-color: rgba(250, 204, 21, 0.52);
-        box-shadow: 0 14px 32px rgba(0, 0, 0, 0.28), 0 0 0 1px rgba(250, 204, 21, 0.05);
+        transform: translateY(-3px) scale(1.008);
+        background: linear-gradient(135deg, rgba(59, 49, 87, 0.92), rgba(28, 26, 43, 0.9));
+        border-color: rgba(196, 181, 253, 0.62);
+        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(167, 139, 250, 0.08), 0 0 25px rgba(124, 58, 237, 0.11);
       }
 
       .option:active:not(:disabled) {
@@ -328,10 +352,10 @@
       }
 
       .option.selected {
-        color: #fefce8;
-        background: linear-gradient(135deg, rgba(234, 179, 8, 0.22), rgba(126, 88, 6, 0.16));
-        border-color: rgba(250, 204, 21, 0.9);
-        box-shadow: inset 0 0 0 1px rgba(250, 204, 21, 0.2), 0 12px 32px rgba(0, 0, 0, 0.24), 0 0 28px rgba(234, 179, 8, 0.14);
+        color: #fafaff;
+        background: linear-gradient(135deg, rgba(124, 58, 237, 0.3), rgba(67, 56, 202, 0.16));
+        border-color: rgba(196, 181, 253, 0.92);
+        box-shadow: inset 0 0 0 1px rgba(196, 181, 253, 0.2), 0 14px 34px rgba(0, 0, 0, 0.28), 0 0 32px rgba(124, 58, 237, 0.2);
       }
 
       .option.is-selecting {
@@ -490,6 +514,8 @@
       @keyframes hint-feedback { 0% { opacity: 0.45; transform: translateY(3px); } 100% { opacity: 1; transform: translateY(0); } }
       @keyframes progress-feedback { 0%, 100% { filter: brightness(1); } 45% { filter: brightness(1.35); } }
       @keyframes float { 0%, 100% { transform: translate3d(0, 0, 0) scale(1); } 50% { transform: translate3d(2rem, 1rem, 0) scale(1.08); } }
+      @keyframes shimmer { 0%, 100% { opacity: 0.35; transform: scaleX(0.72); } 50% { opacity: 1; transform: scaleX(1); } }
+      @keyframes frame-pulse { 0%, 100% { opacity: 0.5; transform: scale(0.99); } 50% { opacity: 1; transform: scale(1); } }
 
       @media (max-width: 560px) {
         .app-shell { width: min(100% - 1.25rem, 1080px); padding-top: 0.8rem; }
