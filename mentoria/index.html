@@ -259,23 +259,52 @@
         transition: transform 200ms ease, border-color 200ms ease, background 200ms ease, box-shadow 200ms ease;
       }
 
-      .option:hover {
+      .option:hover:not(:disabled) {
         transform: translateY(-3px);
         background: linear-gradient(135deg, rgba(54, 54, 65, 0.9), rgba(31, 31, 39, 0.88));
         border-color: rgba(250, 204, 21, 0.52);
         box-shadow: 0 14px 32px rgba(0, 0, 0, 0.28), 0 0 0 1px rgba(250, 204, 21, 0.05);
       }
 
+      .option:active:not(:disabled) {
+        transform: translateY(-1px) scale(0.99);
+        transition-duration: 90ms;
+      }
+
       .option:focus-visible, .button:focus-visible {
-        outline: 3px solid rgba(250, 204, 21, 0.5);
+        outline: 3px solid rgba(250, 204, 21, 0.72);
         outline-offset: 3px;
+        box-shadow: 0 0 0 6px rgba(250, 204, 21, 0.12), 0 14px 32px rgba(0, 0, 0, 0.28);
+      }
+
+      .option:focus-visible {
+        border-color: rgba(254, 240, 138, 0.9);
+      }
+
+      .option:disabled {
+        cursor: not-allowed;
+        opacity: 0.45;
+        filter: grayscale(0.35);
       }
 
       .option.selected {
         color: #fefce8;
-        background: linear-gradient(135deg, rgba(234, 179, 8, 0.19), rgba(126, 88, 6, 0.14));
-        border-color: rgba(250, 204, 21, 0.82);
-        box-shadow: inset 0 0 0 1px rgba(250, 204, 21, 0.16), 0 12px 32px rgba(0, 0, 0, 0.24), 0 0 24px rgba(234, 179, 8, 0.08);
+        background: linear-gradient(135deg, rgba(234, 179, 8, 0.22), rgba(126, 88, 6, 0.16));
+        border-color: rgba(250, 204, 21, 0.9);
+        box-shadow: inset 0 0 0 1px rgba(250, 204, 21, 0.2), 0 12px 32px rgba(0, 0, 0, 0.24), 0 0 28px rgba(234, 179, 8, 0.14);
+      }
+
+      .option.selected::after {
+        position: absolute;
+        top: 0.65rem;
+        right: 0.65rem;
+        width: 0.4rem;
+        height: 0.4rem;
+        background: var(--accent-strong);
+        border-radius: 999px;
+        box-shadow: 0 0 14px rgba(254, 240, 138, 0.9);
+        content: "";
+        animation: select-feedback 300ms cubic-bezier(.22, 1, .36, 1) both;
       }
 
       .option-icon {
@@ -339,9 +368,32 @@
         transition: transform 200ms ease, box-shadow 200ms ease, opacity 200ms ease, filter 200ms ease;
       }
 
-      .button:hover:not(:disabled) { transform: scale(1.025) translateY(-1px); filter: brightness(1.04); box-shadow: 0 15px 34px rgba(234, 179, 8, 0.36); }
-      .button:active:not(:disabled) { transform: scale(0.98); }
-      .button:disabled { cursor: not-allowed; opacity: 0.38; }
+      .button:hover:not(:disabled) {
+        transform: scale(1.025) translateY(-1px);
+        filter: brightness(1.06) saturate(1.05);
+        box-shadow: 0 15px 34px rgba(234, 179, 8, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+      }
+
+      .button:active:not(:disabled) {
+        transform: scale(0.98) translateY(0);
+        box-shadow: 0 6px 16px rgba(234, 179, 8, 0.24), inset 0 2px 5px rgba(113, 63, 18, 0.2);
+        transition-duration: 90ms;
+      }
+
+      .button:disabled {
+        cursor: not-allowed;
+        opacity: 0.38;
+        filter: grayscale(0.35);
+        box-shadow: none;
+      }
+
+      .button:not(:disabled) span {
+        transition: transform 200ms ease;
+      }
+
+      .button:hover:not(:disabled) span {
+        transform: translateX(3px);
+      }
 
       .success {
         display: grid;
@@ -375,6 +427,7 @@
       @keyframes enter { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
       @keyframes question-in { from { opacity: 0; transform: translateX(24px) scale(0.985); } to { opacity: 1; transform: translateX(0) scale(1); } }
       @keyframes question-out { to { opacity: 0; transform: translateX(-18px) scale(0.99); } }
+      @keyframes select-feedback { from { opacity: 0; transform: scale(0.2); } to { opacity: 1; transform: scale(1); } }
       @keyframes float { 0%, 100% { transform: translate3d(0, 0, 0) scale(1); } 50% { transform: translate3d(2rem, 1rem, 0) scale(1.08); } }
 
       @media (max-width: 560px) {
@@ -510,17 +563,39 @@
           </article>
         `;
 
-        stage.querySelectorAll('.option').forEach((option) => {
+        const options = Array.from(stage.querySelectorAll('.option'));
+
+        function selectOption(option) {
+          options.forEach((item) => {
+            item.classList.remove('selected');
+            item.setAttribute('aria-checked', 'false');
+            item.tabIndex = -1;
+          });
+
+          option.classList.add('selected');
+          option.setAttribute('aria-checked', 'true');
+          option.tabIndex = 0;
+          answers[currentQuestion] = Number(option.dataset.index);
+          nextButton.disabled = false;
+          hint.textContent = 'Resposta selecionada. Você pode continuar.';
+        }
+
+        options.forEach((option, index) => {
+          option.tabIndex = index === 0 ? 0 : -1;
+
           option.addEventListener('click', () => {
-            stage.querySelectorAll('.option').forEach((item) => {
-              item.classList.remove('selected');
-              item.setAttribute('aria-checked', 'false');
-            });
-            option.classList.add('selected');
-            option.setAttribute('aria-checked', 'true');
-            answers[currentQuestion] = Number(option.dataset.index);
-            nextButton.disabled = false;
-            hint.textContent = 'Resposta selecionada. Você pode continuar.';
+            selectOption(option);
+          });
+
+          option.addEventListener('keydown', (event) => {
+            const navigationKeys = ['ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft'];
+            if (!navigationKeys.includes(event.key)) return;
+
+            event.preventDefault();
+            const direction = event.key === 'ArrowDown' || event.key === 'ArrowRight' ? 1 : -1;
+            const nextIndex = (index + direction + options.length) % options.length;
+            options[nextIndex].focus();
+            selectOption(options[nextIndex]);
           });
         });
       }
